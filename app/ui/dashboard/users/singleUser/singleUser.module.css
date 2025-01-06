@@ -1,0 +1,62 @@
+.container {
+  display: flex;
+  gap: 50px;
+  margin-top: 20px;
+}
+.infoContainer {
+  flex: 1;
+  background-color: var(--bgSoft);
+  /* 20px avant  */
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: var(--textSoft);
+  height: max-content;
+  font-size: 12px;
+}
+.imgContainer {
+  width: 100%;
+  /* 300px avant  */
+  height: 200px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  /* 20px avant */
+  margin-bottom: 10px;
+}
+.formContainer {
+  flex: 3;
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.form input,
+.form select,
+.form textarea {
+  /* 20px avant */
+  padding: 15px;
+  border: 2px solid #2e374a;
+  border-radius: 5px;
+  background-color: var(--bg);
+  color: var(--text);
+  outline: none;
+  margin: 10px 0px;
+}
+.form label{
+    font-size: 12px; 
+}
+.form button {
+  width: 100%;
+  /* 20px avant */
+  padding: 15px;
+  background-color: teal;
+  border: none;
+  border-radius: 5px;
+  color: var(--text);
+  cursor: pointer;
+}
