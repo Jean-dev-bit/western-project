@@ -1,106 +1,174 @@
+"use client";
+import { useState } from "react";
 import styles from "@/app/page.module.css";
-import Image from "next/image";
-import Link from "next/link";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function Login() {
+  const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState({
+    nomUtilisateur: "",
+    prenomUtilisateur: "",
+    username: "",
+    password: "",
+    rpassword: "",
+  });
+  const [message, setMessage] = useState("");
+  const router = useRouter();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+  
+    if (formData.password !== formData.rpassword) {
+      setMessage("Les mots de passe ne correspondent pas.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("/api/signup", {
+        username: formData.username,
+        nomUtilisateur: formData.nomUtilisateur,
+        prenomUtilisateur: formData.prenomUtilisateur,
+        password: formData.password,
+      });
+  
+      if (response.data.success) {
+        setMessage("Inscription réussie !");
+        setTimeout(() => {
+          setIsSignup(false); 
+        }, 2000);
+      } else {
+        setMessage(response.data.message || "Une erreur est survenue.");
+      }
+    } catch (error) {
+      console.error("Erreur Axios :", error);
+      setMessage("Une erreur est survenue lors de l'inscription.");
+    }
+  };
+
+  // Connexion
+  const handleLogin = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post("/api/login", {
+        username: formData.username,
+        password: formData.password,
+      });
+  
+      if (response.data.success) {
+        router.push("/dashboard");
+      } else {
+        setMessage(response.data.message || "Identifiants incorrects.");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error("Erreur serveur : ", error.response.data);
+        setMessage(error.response.data.message);
+      } else {
+        console.error("Erreur client : ", error.message);
+        setMessage("Une erreur est survenue lors de la connexion.");
+      }
+    }
+  };
+  
+
   return (
-    <div className={styles.wrapper}>
-      <header className={styles.navbar}>
-        <div className={styles.logo}>Western <span>Agency</span></div>
-        <nav className={styles.navLinks}>
-          <Link href="/features" className={styles.navItem}>
-            ACCEUIL
-          </Link>
-          <Link href="/pricing" className={styles.navItem}>
-            TARIFS
-          </Link>
-          <Link href="/contact" className={styles.navItem}>
-            CONTACT
-          </Link>
-        </nav>
-        <div className={styles.navActions}>
-          <Link href="/dashboard" className={styles.adminButton}>
-            Espace administrateur
-          </Link>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className={styles.hero}>
-        <div className={styles.heroText}>
-          <h1 className={styles.heroTitle}>
-            Simplifiez vos finances avec <span>Western Agency</span>
-          </h1>
-          <p className={styles.heroSubtitle}>
-            Western Agency est bien plus qu’une simple application : c’est votre partenaire financier.
-            Que vous soyez un entrepreneur cherchant à suivre vos ventes ou un professionnel souhaitant optimiser ses transactions, notre solution intuitive met à votre disposition des outils puissants pour centraliser la gestion de vos finances.
-            Visualisez vos données en temps réel, identifiez les opportunités de croissance, et prenez des décisions éclairées, le tout dans une interface simple et élégante.
-            Avec Western Agency, gérer vos finances n’a jamais été aussi facile et stratégique.
-          </p>
-          <Link href="/signup" className={styles.ctaButton}>
-            Commencez Maintenant
-          </Link>
-        </div>
-        <Image
-          src="/finance.jpg"
-          alt=""
-          width={500}
-          height={400}
-          className={styles.heroImage}
-        />
-      </main>
-
-      {/* Features Section */}
-      <section className={styles.features}>
-        <h2 className={styles.sectionTitle}>Pourquoi nous choisir ?</h2>
-        <div className={styles.featuresGrid}>
-          <div className={styles.featureCard}>
-            {/* <Image src="/secure.png" alt="Secure" width={50} height={50} /> */}
-            <h3>Sécurité</h3>
-            <p>La sécurité de vos données et de vos transactions est notre priorité.
-              Nous utilisons des technologies de chiffrement avancées, des outils de détection des fraudes basés sur l'intelligence artificielle, et respectons les normes les plus strictes en matière de conformité réglementaire.
-              Vous pouvez gérer vos finances en toute confiance, en sachant que vos informations sont protégées à chaque étape.</p>
-          </div>
-          <div className={styles.featureCard}>
-            {/* <Image src="/analytics.png" alt="Analytics" width={50} height={50} /> */}
-            <h3>Analyse Avancée</h3>
-            <p>
-              Transformez vos données financières en informations stratégiques grâce à nos outils d'analyse avancée.
-              Profitez de tableaux de bord interactifs, de rapports personnalisés et de prévisions basées sur l'intelligence artificielle pour suivre vos performances et anticiper vos opportunités.
-              Que ce soit pour optimiser vos dépenses, identifier des tendances ou planifier l'avenir, Western Agency vous donne les clés pour une gestion financière intelligente.
-            </p>
-          </div>
-          <div className={styles.featureCard}>
-            {/* <Image src="/support.png" alt="Support" width={50} height={50} /> */}
-            <h3>Support 24/7</h3>
-            <p>
-              Avec Western Agency, vous n’êtes jamais seul dans la gestion de vos finances. Notre équipe de support dédiée est disponible 24h/24 et 7j/7 pour répondre à toutes vos questions, résoudre vos problèmes et vous guider à chaque étape.
-              Que ce soit par chat, email ou téléphone, nous sommes là pour garantir votre tranquillité d'esprit et une expérience utilisateur fluide.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerLogo}>Western Agency</div>
-          <nav className={styles.footerNav}>
-            <Link href="/privacy" className={styles.footerLink}>
-              Politique de Confidentialité
-            </Link>
-            <Link href="/terms" className={styles.footerLink}>
-              Conditions d'Utilisation
-            </Link>
-            <Link href="/help" className={styles.footerLink}>
-              Aide
-            </Link>
-          </nav>
-        </div>
-        <p className={styles.footerCopy}>
-          © 2025 Western Agency. Tous droits réservés.
-        </p>
-      </footer>
+    <div className={styles.loginWrapper}>
+      <div className={styles.backgroundImage}></div>
+      <div className={styles.loginForm}>
+        {isSignup ? (
+          <>
+            <h2>Inscription 😊👇</h2>
+            <form onSubmit={handleSignup}>
+              <div className={styles.formGroup}>
+                <input
+                  type="text"
+                  id="nomUtilisateur"
+                  placeholder="Entrer votre nom"
+                  value={formData.nomUtilisateur}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="text"
+                  id="prenomUtilisateur"
+                  placeholder="Entrer votre prénom"
+                  value={formData.prenomUtilisateur}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Entrer votre nom d'utilisateur"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Entrer votre mot de passe"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  id="rpassword"
+                  placeholder="Confirmer votre mot de passe"
+                  value={formData.rpassword}
+                  onChange={handleChange}
+                />
+              </div>
+              <button type="submit" className={styles.submitButton}>
+                S'inscrire
+              </button>
+              <span className={styles.footer} onClick={() => setIsSignup(false)} style={{ cursor: "pointer" }}>
+                Déjà un compte ? <strong>Connectez-vous ici</strong>
+              </span>
+            </form>
+            {message && <p className={styles.message}>{message}</p>}
+          </>
+        ) : (
+          <>
+            <h2>Connexion</h2>
+            <form onSubmit={handleLogin}>
+              <div className={styles.formGroup}>
+                <input type="text" id="username" placeholder="Entrer votre nom d'utilisateur" />
+              </div>
+              <div className={styles.formGroup}>
+                <input type="password" id="password" placeholder="Entrer votre mot de passe" />
+              </div>
+              <button type="submit" className={styles.submitButton}>
+                Se connecter
+              </button>
+              <span
+                className={styles.footer}
+                onClick={() => setIsSignup(true)}
+                style={{ cursor: "pointer" }}
+              >
+                Si vous n&apos;avez pas un compte,{" "}
+                <strong>Inscrivez-vous par ici</strong>
+              </span>
+            </form>
+          </>
+        )}
+      </div>
     </div>
   );
 }
+

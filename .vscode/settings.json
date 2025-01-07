@@ -28,5 +28,7 @@
         "utilisateur",
         "Xsmas",
         "Yémalin"
-    ]
+    ],
+    "WillLuke.nextjs.addTypesOnSave": true,
+    "WillLuke.nextjs.hasPrompted": true
 }
