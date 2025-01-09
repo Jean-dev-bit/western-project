@@ -1,0 +1,79 @@
+.container {
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.form input,
+.form select,
+.form textarea {
+  padding: 15px;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 2px solid #2e374a;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  outline: none;
+}
+
+.form input {
+  width: 45%;
+}
+
+.form textarea {
+  width: 100%;
+}
+.form select {
+  width: 45%;
+}
+
+.form button {
+  width: 100%;
+  padding: 15px;
+  background-color: teal;
+  border: none;
+  border-radius: 5px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Style des suggestions */
+
+.searchContainer {
+  position: relative;
+  width: 100%;
+}
+
+.suggestions {
+  position: absolute;
+  /* top: 100%; */
+  width: 45%;
+  left: 0;
+  right: 0;
+  /* max-height: 200px; */
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 5px;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  color: black;
+}
+
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* .suggestionItem:hover {
+  background-color: #182237;
+  color: #151C2C;
+} */
