@@ -9,7 +9,7 @@ import Pagination from "@/app/ui/dashboard/pagination/pagination";
 
 const handleDelete = async (id) => {
   try {
-    const res = await fetch(`/api/clients/${id}`, {
+    const res = await fetch(`/api/addClient/${id}`, {
       method: "DELETE",
     });
     if (!res.ok) {
@@ -44,7 +44,7 @@ const UsersPage = () => {
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Rechercher un utilisateur..." />
-        <Link href="/dashboard/users/add">
+        <Link href="/dashboard/customers/add">
           <button className={styles.addButton}>Ajouter un client</button>
         </Link>
       </div>
@@ -78,7 +78,7 @@ const UsersPage = () => {
               <td>{user.sexe}</td>
               <td>
                 <div className={styles.buttons}>
-                  <Link href={`/dashboard/users/${user.id}`}>
+                  <Link href={`/dashboard/customers/${user.id}`}>
                     <button className={`${styles.button} ${styles.view}`}>
                       Voir
                     </button>

@@ -1,0 +1,100 @@
+.container {
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.addButton {
+  padding: 10px;
+  background-color: #5d57c9;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+.date {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.dateField label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.dateField input {
+  padding: 15px;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 2px solid #2e374a;
+  border-radius: 5px;
+  outline: none;
+}
+
+.Operations {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+.Operations td {
+  padding: 10px;
+  border: 2px solid #2e374a;
+}
+.bolders {
+  font-weight: 200;
+}
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+}
+.view {
+  background-color: teal;
+}
+.delete {
+  background-color: crimson;
+}
+
+.totals {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+
+  background-color: var(--bg);
+  padding: 10px;
+  border-radius: 5px;
+}
+.download {
+  background-color: teal;
+  padding: 10px;
+  border-radius: 5px;
+}

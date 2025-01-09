@@ -16,7 +16,7 @@ import {
 
 const menuItems = [
   {
-    title: "Pages",
+    title: "Enregistrements",
     list: [
       {
         title: "Tableau de bord",
@@ -25,59 +25,34 @@ const menuItems = [
       },
       {
         title: "Clients",
-        path: "/dashboard/users",
+        path: "/dashboard/customers",
         icon: <MdSupervisedUserCircle />,
       },
       {
         title: "Cartes",
-        path: "/dashboard/products",
+        path: "/dashboard/cartes",
         icon: <MdShoppingBag />,
       },
       {
-        title: "Transfert rapide",
-        path: "/dashboard/transactions",
-        icon: <MdAttachMoney />,
-      },
-      {
-        title: "Transactions",
-        path: "/dashboard/transactions",
-        icon: <MdAttachMoney />,
-      },
-      {
-        title: "Ventes de Crédits",
-        path: "/dashboard/transactions",
-        icon: <MdAttachMoney />,
-      },
-      {
-        title: "Recharge abonnement Canal +",
-        path: "/dashboard/transactions",
-        icon: <MdAttachMoney />,
-      },
-      {
-        title: "Facture SBEE / SONEB",
-        path: "/dashboard/transactions",
+        title: "Opérations",
+        path: "/dashboard/operations",
         icon: <MdAttachMoney />,
       },
     ],
   },
 
   {
-    title: "Analytics",
+    title: "Données Analytiques",
     list: [
       {
-        title: "Revenue",
+        title: "Bénéfice journalier",
         path: "/dashboard/revenue",
         icon: <MdWork />,
       },
       {
-        title: "Reports",
+        title: "Rapports",
         path: "/dashboard/reports",
         icon: <MdAnalytics />,
-      },
-      {
-        title: "Teams",
-        path: "/dashboard/teams",
-        icon: <MdPeople />,
       },
     ],
   },
@@ -88,11 +63,6 @@ const menuItems = [
         title: "Settings",
         path: "/dashboard/settings",
         icon: <MdOutlineSettings />,
-      },
-      {
-        title: "Help",
-        path: "/dashboard/help",
-        icon: <MdHelpCenter />,
       },
     ],
   },
@@ -106,7 +76,6 @@ const Sidebar = () => {
           className={styles.userImage}
           src="/noavatar.png"
           alt="Logo"
-          // 50
           width="40"
           height="40"
         />

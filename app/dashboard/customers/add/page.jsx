@@ -32,7 +32,7 @@ const handleSubmit = async (e) => {
       const data = await response.json();
       e.target.reset();
 
-      window.location.href = "/dashboard/users";
+      window.location.href = "/dashboard/customers";
     } else {
       const errorData = await response.json();
       console.error("Erreur lors de l'enregistrement :", errorData);

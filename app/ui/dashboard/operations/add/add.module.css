@@ -13,13 +13,11 @@
 .form input,
 .form select,
 .form textarea {
-  /* 30px avant  */
   padding: 15px;
   background-color: var(--bg);
   color: var(--text);
   border: 2px solid #2e374a;
   border-radius: 5px;
-  /* 30px avant  */
   margin-bottom: 15px;
   outline: none;
 }
@@ -36,13 +34,42 @@
 }
 
 .form button {
-  width: 100%;
-  /* 30px avant */
-  padding: 15px;
-  background-color: teal;
+  padding: 10px;
   border: none;
   border-radius: 5px;
   color: var(--text);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.button{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.draft{
+  background-color: darkgray;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.save{
+  background-color: teal;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  gap: 5px;
+}
+.validate{
+  background-color: crimson;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 

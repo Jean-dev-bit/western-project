@@ -17,7 +17,6 @@ export async function POST(req) {
       observations,
     } = body;
 
-    // Vérifier que tous les champs requis sont fournis
     if (
       !clientId ||
       !bankName ||
@@ -34,7 +33,6 @@ export async function POST(req) {
       );
     }
 
-    // Vérifier si le client existe
     const client = await prisma.client.findUnique({
       where: { id: clientId },
     });
@@ -46,7 +44,6 @@ export async function POST(req) {
       });
     }
 
-    // Créer la carte associée au client
     const newCard = await prisma.card.create({
       data: {
         clientId: clientId,
@@ -76,14 +73,12 @@ export async function POST(req) {
 
 export async function GET() {
   try {
-    // Récupération de toutes les cartes
     const cards = await prisma.card.findMany({
       include: {
-        client: true, // Inclut les informations du client associé, si nécessaire
+        client: true,
       },
     });
 
-    // Retourner les cartes sous forme de réponse JSON
     return NextResponse.json(cards);
   } catch (error) {
     console.error("Erreur lors de la récupération des cartes :", error);

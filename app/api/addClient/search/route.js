@@ -13,7 +13,6 @@ export async function GET(req) {
       );
     }
 
-    // Recherche les clients dont le nom ou les prénoms contiennent le texte tapé
     const clients = await prisma.client.findMany({
       where: {
         OR: [
@@ -31,9 +30,8 @@ export async function GET(req) {
     return new Response(JSON.stringify(clients), { status: 200 });
   } catch (error) {
     console.error("Erreur lors de la recherche des clients :", error);
-    return new Response(
-      JSON.stringify({ error: "Une erreur est survenue." }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: "Une erreur est survenue." }), {
+      status: 500,
+    });
   }
 }
