@@ -12,12 +12,10 @@ const SingleUserPage = () => {
       </div>
       <div className={styles.formContainer}>
         <form action="" className={styles.form}>
-          <label>Nom d&apos;utilisateur</label>
-          <input type="text" name="username" placeholder="Nom d'utilisateur" />
-          <label>Email</label>
-          <input type="email" name="username" placeholder="western@gmail.com" />
-          <label>Mot de Passe</label>
-          <input type="password" name="username" />
+          <label>Nom</label>
+          <input type="text" name="username" placeholder="Nom" />
+          <label>Prénoms</label>
+          <input name="prenoms" type="text" placeholder="Prénoms" required />
           <label>Téléphone</label>
           <input
             type="phone"
@@ -28,19 +26,17 @@ const SingleUserPage = () => {
           <textarea
             name="address"
             id="address"
-            // rows-16 avant
-            rows="5"
-            placeholder="Cotonou..."
+            rows="2"
+            placeholder="Cotonou"
           ></textarea>
-          <label>Administrateur ?</label>
-          <select name="isAdmin" id="isAdmin">
-            <option value={true}>Oui</option>
-            <option value={false}>Oui</option>
-          </select>
-          <label>Active ?</label>
-          <select name="isActive" id="isActive">
-            <option value={true}>Oui</option>
-            <option value={false}>Non</option>
+          <label>Sexe</label>
+          <select name="sexe" required>
+            <option value="" disabled selected>
+              Sexe
+            </option>
+            <option value="Masculin">Masculin</option>
+            <option value="Féminin">Féminin</option>
+            <option value="Autres">Autres</option>
           </select>
           <button type="submit">Mettre à jour les informations</button>
         </form>

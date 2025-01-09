@@ -5,21 +5,25 @@ import { connectToDatabase } from "@/app/libs/mongodb";
 export async function POST(req) {
   try {
 
-    const { username, password } = await req.json();
+    const { username, hashedPassword } = await req.json();
 
     const { db } = await connectToDatabase();
 
 
     const user = await db.collection("User").findOne({ username });
+    console.log(username);
+    console.log(hashedPassword);
 
     if (!user) {
+      console.log("Utilisateur non trouvé avec le username :", username);
       return new Response(
         JSON.stringify({ success: false, message: "Utilisateur non trouvé" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    const isMatch = await bcrypt.compare(password, user.hashedPassword);
+    const isMatch = await bcrypt.compare(hashedPassword, user.hashedPassword);
+
     if (!isMatch) {
       return new Response(
         JSON.stringify({ success: false, message: "Mot de passe incorrect" }),

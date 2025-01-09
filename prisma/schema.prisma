@@ -19,3 +19,29 @@ model User {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+model Client {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  nom       String
+  prenoms   String
+  telephone String   @unique
+  sexe      String
+  adresse   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  card      Card[]
+}
+
+model Card {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId     String   @db.ObjectId
+  client       Client   @relation(fields: [clientId], references: [id])
+  bankName     String
+  cardType     String
+  quantity     Int
+  sellingPrice Float
+  commission   Float
+  observations String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

@@ -1,9 +1,45 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Search from "@/app/ui/dashboard/search/search";
 import styles from "@/app/ui/dashboard/users/users.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
-const UsersPage = async () => {
+
+const handleDelete = async (id) => {
+  try {
+    const res = await fetch(`/api/clients/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      throw new Error("Erreur lors de la suppression de l'utilisateur.");
+    }
+    alert("Utilisateur supprimé avec succès !");
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+    alert("Une erreur est survenue lors de la suppression.");
+  }
+};
+
+const UsersPage = () => {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch("http://localhost:3000/api/addClient");
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(data);
+      } else {
+        console.error("Erreur lors de la récupération des utilisateurs");
+        alert("Erreur lors de la récupération des utilisateurs.");
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -15,264 +51,48 @@ const UsersPage = async () => {
       <table className={styles.table}>
         <thead>
           <tr className={styles.bolder}>
-            <td>Nom & Prénoms</td>
-            <td>Email</td>
-            <td>Date de création</td>
-            <td>Rôle</td>
-            <td>Status</td>
+            <td>Nom</td>
+            <td>Prénoms</td>
+            <td>Téléphone</td>
+            <td>Sexe</td>
             <td>Action</td>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Abdul
-              </div>
-            </td>
-            <td>adbul@gmail.com</td>
-            <td>11.12.2001</td>
-            <td>Client</td>
-            <td>Active</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <div className={styles.user}>
+                  <Image
+                    src="/noavatar.png"
+                    alt=""
+                    width="30"
+                    height="30"
+                    className={styles.userImage}
+                  />
+                  {user.nom}
+                </div>
+              </td>
+              <td>{user.prenoms}</td>
+              <td>{user.telephone}</td>
+              <td>{user.sexe}</td>
+              <td>
+                <div className={styles.buttons}>
+                  <Link href={`/dashboard/users/${user.id}`}>
+                    <button className={`${styles.button} ${styles.view}`}>
+                      Voir
+                    </button>
+                  </Link>
+                  <button
+                    className={`${styles.button} ${styles.delete}`}
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    Supprimer
                   </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 2nd users */}
-
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Solange
-              </div>
-            </td>
-            <td>solange@gmail.com</td>
-            <td>15.01.2025</td>
-            <td>Client</td>
-            <td>Passive</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-
-          {/* 3rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Junior
-              </div>
-            </td>
-            <td>junior@gmail.com</td>
-            <td>10.11.2023</td>
-            <td>Client</td>
-            <td>Passive</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 4rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Peace
-              </div>
-            </td>
-            <td>peace@gmail.com</td>
-            <td>19.05.2021</td>
-            <td>Client</td>
-            <td>Passive</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 5rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Antonio
-              </div>
-            </td>
-            <td>antonio@gmail.com</td>
-            <td>22.02.2022</td>
-            <td>Client</td>
-            <td>Active</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 6rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Jean-Pierre
-              </div>
-            </td>
-            <td>jeanpierre@gmail.com</td>
-            <td>25.02.2023</td>
-            <td>Client</td>
-            <td>Active</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 7rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Romaric
-              </div>
-            </td>
-            <td>romaric@gmail.com</td>
-            <td>17.04.2024</td>
-            <td>Admin</td>
-            <td>Passive</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 8rd users */}
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.userImage}
-                />
-                Marcel
-              </div>
-            </td>
-            <td>marcel@gmail.com</td>
-            <td>15.07.2024</td>
-            <td>Admin</td>
-            <td>Passive</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/users/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <Pagination />

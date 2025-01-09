@@ -1,9 +1,167 @@
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import styles from "@/app/ui/dashboard/products/products.module.css";
+// import Pagination from "@/app/ui/dashboard/pagination/pagination";
+// import Search from "@/app/ui/dashboard/search/search";
+
+// // Fonction pour supprimer une carte
+// const handleDelete = async (id) => {
+//   try {
+//     const res = await fetch(`/api/card/${id}`, {
+//       method: "DELETE",
+//     });
+//     if (!res.ok) {
+//       throw new Error("Erreur lors de la suppression de la carte.");
+//     }
+//     alert("Carte supprimée avec succès !");
+//     window.location.reload(); // Recharger la page après suppression
+//   } catch (error) {
+//     console.error(error);
+//     alert("Une erreur est survenue lors de la suppression.");
+//   }
+// };
+
+// const ProductsPage = () => {
+//   const [cards, setCards] = useState([]);
+
+//   // Utilisation de useEffect pour récupérer les cartes depuis l'API
+//   useEffect(() => {
+//     const fetchCards = async () => {
+//       const res = await fetch("http://localhost:3000/api/card"); // L'URL de l'API pour récupérer les cartes
+//       if (res.ok) {
+//         const data = await res.json();
+//         setCards(data); // Mettre à jour l'état avec les cartes récupérées
+//       } else {
+//         console.error("Erreur lors de la récupération des cartes");
+//         alert("Erreur lors de la récupération des cartes.");
+//       }
+//     };
+
+//     fetchCards();
+//   }, []);
+
+//   return (
+//     <div className={styles.container}>
+//       <div className={styles.top}>
+//         <Search placeholder="Rechercher une carte vendue..." />
+//         <Link href="/dashboard/products/add">
+//           <button className={styles.addButton}>Enregistrer une carte</button>
+//         </Link>
+//       </div>
+//       <table className={styles.table}>
+//         <thead>
+//           <tr className={styles.bolders}>
+//             <td>Clients</td>
+//             <td>Banque</td>
+//             <td>Type de carte</td>
+//             <td>Quantité</td>
+//             <td>Prix de vente</td>
+//             <td>Commission</td>
+//             <td>Observations</td>
+//             <td>Action</td>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {/* Affichage des cartes récupérées */}
+//           {cards.map((card) => (
+//             <tr key={card.id}>
+//               <td>
+//                 <div className={styles.product}>
+//                   <Image
+//                     src="/noproduct.jpg"
+//                     alt="Carte"
+//                     width="30"
+//                     height="30"
+//                     className={styles.productImage}
+//                   />
+//                   {card.client ? `${card.client.nom} ${card.client.prenoms}` : "Client inconnu"}
+//                 </div>
+//               </td>
+//               <td>{card.bankName}</td>
+//               <td>{card.cardType}</td>
+//               <td>{card.quantity}</td>
+//               <td>{card.sellingPrice}</td>
+//               <td>{card.commission}</td>
+//               <td>{card.observations}</td>
+//               <td>
+//                 <div className={styles.buttons}>
+//                   <Link href={`/dashboard/products/${card.id}`}>
+//                     <button className={`${styles.button} ${styles.view}`}>Voir</button>
+//                   </Link>
+//                   <button
+//                     className={`${styles.button} ${styles.delete}`}
+//                     onClick={() => handleDelete(card.id)}
+//                   >
+//                     Supprimer
+//                   </button>
+//                 </div>
+//               </td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//       <Pagination />
+//     </div>
+//   );
+// };
+
+// export default ProductsPage;
+
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/app/ui/dashboard/products/products.module.css";
 import Pagination from "@/app/ui/dashboard/pagination/pagination";
 import Search from "@/app/ui/dashboard/search/search";
+
+// Fonction pour supprimer une carte
+const handleDelete = async (id) => {
+  try {
+    const res = await fetch(`/api/card/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      throw new Error("Erreur lors de la suppression de la carte.");
+    }
+    alert("Carte supprimée avec succès !");
+    window.location.reload(); // Recharger la page après suppression
+  } catch (error) {
+    console.error(error);
+    alert("Une erreur est survenue lors de la suppression.");
+  }
+};
+
 const ProductsPage = () => {
+  const [cards, setCards] = useState([]);
+  const [totals, setTotals] = useState({ totalSales: 0, totalCommission: 0 });
+
+  // Utilisation de useEffect pour récupérer les cartes depuis l'API
+  useEffect(() => {
+    const fetchCards = async () => {
+      const res = await fetch("http://localhost:3000/api/card"); // L'URL de l'API pour récupérer les cartes
+      if (res.ok) {
+        const data = await res.json();
+        setCards(data); // Mettre à jour l'état avec les cartes récupérées
+        
+        // Calcul des totaux
+        const totalSales = data.reduce((acc, card) => acc + card.sellingPrice * card.quantity, 0);
+        const totalCommission = data.reduce((acc, card) => acc + card.commission, 0);
+
+        setTotals({ totalSales, totalCommission });
+      } else {
+        console.error("Erreur lors de la récupération des cartes");
+        alert("Erreur lors de la récupération des cartes.");
+      }
+    };
+
+    fetchCards();
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -15,266 +173,62 @@ const ProductsPage = () => {
       <table className={styles.table}>
         <thead>
           <tr className={styles.bolders}>
-            <td>Nom</td>
-            <td>Description</td>
-            <td>Prix vendu</td>
-            <td>Date</td>
+            <td>Clients</td>
+            <td>Banque</td>
+            <td>Type de carte</td>
             <td>Quantité</td>
+            <td>Prix de vente</td>
+            <td>Commission</td>
+            <td>Observations</td>
             <td>Action</td>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                iphone Xsmas
-              </div>
-            </td>
-            <td>128 GB Bat 70</td>
-            <td>$520</td>
-            <td>Oct 29 2023</td>
-            <td>50</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
+          {/* Affichage des cartes récupérées */}
+          {cards.map((card) => (
+            <tr key={card.id}>
+              <td>
+                <div className={styles.product}>
+                  <Image
+                    src="/noproduct.jpg"
+                    alt="Carte"
+                    width="30"
+                    height="30"
+                    className={styles.productImage}
+                  />
+                  {card.client ? `${card.client.nom} ${card.client.prenoms}` : "Client inconnu"}
+                </div>
+              </td>
+              <td>{card.bankName}</td>
+              <td>{card.cardType}</td>
+              <td>{card.quantity}</td>
+              <td>{card.sellingPrice}</td>
+              <td>{card.commission}</td>
+              <td>{card.observations}</td>
+              <td>
+                <div className={styles.buttons}>
+                  <Link href={`/dashboard/products/${card.id}`}>
+                    <button className={`${styles.button} ${styles.view}`}>Voir</button>
+                  </Link>
+                  <button
+                    className={`${styles.button} ${styles.delete}`}
+                    onClick={() => handleDelete(card.id)}
+                  >
+                    Supprimer
                   </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 2nd products */}
-
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                Tecno Camon 20 Pro
-              </div>
-            </td>
-            <td>256 GB Ram 16 GB 5000mAh</td>
-            <td>$620</td>
-            <td>Nov 29 2023</td>
-            <td>90</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-
-          {/* 3rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                Samsung S24
-              </div>
-            </td>
-            <td>64 GB Ram 12 GB 5000mAh</td>
-            <td>$600</td>
-            <td>Jan 12 2023</td>
-            <td>15</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 4rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                itel P40
-              </div>
-            </td>
-            <td>32 GB Ram 4 GB 6000 mAh</td>
-            <td>$120</td>
-            <td>Feb 29 2023</td>
-            <td>11</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 5rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                Infinix
-              </div>
-            </td>
-            <td>32 GB Ram 2 GB 6000mAh</td>
-            <td>$220</td>
-            <td>Jul 29 2023</td>
-            <td>80</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 6rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                Redmi
-              </div>
-            </td>
-            <td>128 GB Ram 8 GB 5000mAh</td>
-            <td>$320</td>
-            <td>June 29 2023</td>
-            <td>40</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 7rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                Nokia
-              </div>
-            </td>
-            <td>64 GB Ram 8 GB 6000mAh</td>
-            <td>$420</td>
-            <td>March 29 2023</td>
-            <td>42</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/* 8rd products */}
-          <tr>
-            <td>
-              <div className={styles.product}>
-                <Image
-                  src="/noproduct.jpg"
-                  alt=""
-                  width="30"
-                  height="30"
-                  className={styles.productImage}
-                />
-                iphone 12 Pro Max
-              </div>
-            </td>
-            <td>256 GB Bat 95 id off</td>
-            <td>$920</td>
-            <td>Feb 29 2021</td>
-            <td>100</td>
-            <td>
-              <div className={styles.buttons}>
-                <Link href="/dashboard/products/test">
-                  <button className={`${styles.button} ${styles.view}`}>
-                    Voir
-                  </button>
-                </Link>
-                <button className={`${styles.button} ${styles.delete}`}>
-                  Supprimer
-                </button>
-              </div>
-            </td>
-          </tr>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+
+      {/* Affichage des totaux */}
+      <div className={styles.totals}>
+        <p>Total des cartes vendues : {totals.totalSales.toFixed(0)} FCFA</p>
+        <p>Total des commissions : {totals.totalCommission.toFixed(0)} FCFA</p>
+      </div>
+
       <Pagination />
     </div>
   );

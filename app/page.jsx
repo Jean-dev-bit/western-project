@@ -26,12 +26,12 @@ export default function Login() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.rpassword) {
       setMessage("Les mots de passe ne correspondent pas.");
       return;
     }
-  
+
     try {
       const response = await axios.post("/api/signup", {
         username: formData.username,
@@ -39,11 +39,11 @@ export default function Login() {
         prenomUtilisateur: formData.prenomUtilisateur,
         password: formData.password,
       });
-  
+
       if (response.data.success) {
         setMessage("Inscription réussie !");
         setTimeout(() => {
-          setIsSignup(false); 
+          setIsSignup(false);
         }, 2000);
       } else {
         setMessage(response.data.message || "Une erreur est survenue.");
@@ -57,13 +57,17 @@ export default function Login() {
   // Connexion
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post("/api/login", {
         username: formData.username,
-        password: formData.password,
-      });
-  
+        hashedPassword: formData.hashedPassword,
+      },
+      );
+
+      console.log('USERNAME:', formData.username),
+        console.log('HASHEDPASSWORD:', hashedPassword);
+
       if (response.data.success) {
         router.push("/dashboard");
       } else {
@@ -79,7 +83,7 @@ export default function Login() {
       }
     }
   };
-  
+
 
   return (
     <div className={styles.loginWrapper}>
@@ -151,7 +155,7 @@ export default function Login() {
                 <input type="text" id="username" placeholder="Entrer votre nom d'utilisateur" />
               </div>
               <div className={styles.formGroup}>
-                <input type="password" id="password" placeholder="Entrer votre mot de passe" />
+                <input type="password" id="hashedPassword" placeholder="Entrer votre mot de passe" />
               </div>
               <button type="submit" className={styles.submitButton}>
                 Se connecter

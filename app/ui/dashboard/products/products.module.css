@@ -55,3 +55,18 @@
 .delete {
   background-color: crimson;
 }
+
+/*  styles pour les totaux  */
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.totals p {
+  margin: 0; 
+  font-weight: bold;
+}
+
